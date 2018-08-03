@@ -42,25 +42,26 @@
 				this.$emit('change', this.initSelected)
 			}
 		},
-		mounted () {
-			let v = this
-			// console.log(v.initOptions[0][v.initLabel], 'v.initOptions')
-			if (v.initOptions.length > 0) {
-				v.initOptions.forEach((e, index) => {
-					if (v.initSelected.length > 0) {
-						e.checked = false
-						v.initSelected.forEach(i => {
-							if (i == e[v.initRelKey]) {
-								e.checked = true
-								let a = e
-								v.initOptions.splice(index, 1, a)
-							}
-						})
-					} else {
-						e.checked = false
-					}
-				})
-				console.log(v.initOptions, 'v.initOptions')
+		watch: {
+			selected: function (val ,oldVal) {
+				let v = this
+				v.initSelected = val
+				if (v.initOptions.length > 0) {
+					v.initOptions.forEach((e, index) => {
+						if (v.initSelected.length > 0) {
+							e.checked = false
+							v.initSelected.forEach(item => {
+								if (item == e[v.initRelKey]) {
+									e.checked = true
+									let a = e
+									v.initOptions.splice(index, 1, a)
+								}
+							})
+						} else {
+							e.checked = false
+						}
+					})
+				}
 			}
 		}
 	}
