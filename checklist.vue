@@ -63,6 +63,26 @@
 					})
 				}
 			}
+		},
+		mounted () {
+			let v = this
+			v.initSelected = this.selected
+			if (v.initOptions.length > 0) {
+				v.initOptions.forEach((eg, index) => {
+					if (v.initSelected.length > 0) {
+						eg.checked = false
+						v.initSelected.forEach(item => {
+							if (item == eg[v.initRelKey]) {
+								eg.checked = true
+								let a = eg
+								v.initOptions.splice(index, 1, a)
+							}
+						})
+					} else {
+						eg.checked = false
+					}
+				})
+			}
 		}
 	}
 </script>
