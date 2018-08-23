@@ -106,6 +106,7 @@
 		vertical-align: middle;
 		border: 1px solid #6F6F6F;
 		border-radius: 50%;
+		box-sizing: border-box;
 		cursor: pointer;
 	}
 	span.checked-active {
