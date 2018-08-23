@@ -15,7 +15,7 @@
 		props: ['options','selected','bgc','direction','max','label','checked','relkey'],
 		data () {
 			return {
-				initOptions: this.options ? this.options : [],
+				// initOptions: this.options ? this.options : [],
 				initSelected: this.selected ? this.selected : [],
 				initBgc: this.bgc ? this.bgc : '#FFBF2F',
 				initDirection: this.direction ? this.direction : 'horizontal',
@@ -39,50 +39,50 @@
 				} else {
 					this.initSelected.push(a[this.initRelKey])
 				}
-				this.$emit('change', this.initSelected)
+				this.$emit('change', {val:this.initSelected, current: this.initOptions[index]})
+			},
+			init () {
+				let v = this
+				if (v.initOptions.length > 0) {
+					v.initOptions.forEach((eg, index) => {
+						if (v.initSelected.length > 0) {
+							eg.checked = false
+							v.initSelected.forEach(item => {
+								if (item == eg[v.initRelKey]) {
+									eg.checked = true
+									let a = eg
+									v.initOptions.splice(index, 1, a)
+								}
+							})
+						} else {
+							if (eg.checked) {
+								let a = eg
+								a.checked = false
+								v.initOptions.splice(index, 1, a)
+							}
+							eg.checked = false
+						}
+					})
+				}
+			}
+		},
+		computed: {
+			initOptions () {
+				let initOptions = this.options ? this.options : []
+				return initOptions
 			}
 		},
 		watch: {
 			selected: function (val ,oldVal) {
 				let v = this
 				v.initSelected = val
-				if (v.initOptions.length > 0) {
-					v.initOptions.forEach((e, index) => {
-						if (v.initSelected.length > 0) {
-							e.checked = false
-							v.initSelected.forEach(item => {
-								if (item == e[v.initRelKey]) {
-									e.checked = true
-									let a = e
-									v.initOptions.splice(index, 1, a)
-								}
-							})
-						} else {
-							e.checked = false
-						}
-					})
-				}
+				v.init()
 			}
 		},
 		mounted () {
 			let v = this
 			v.initSelected = this.selected
-			if (v.initOptions.length > 0) {
-				v.initOptions.forEach((eg, index) => {
-					if (v.initSelected.length > 0) {
-						eg.checked = false
-						v.initSelected.forEach(item => {
-							if (item == eg[v.initRelKey]) {
-								eg.checked = true
-								let a = eg
-								v.initOptions.splice(index, 1, a)
-							}
-						})
-					} else {
-						eg.checked = false
-					}
-				})
-			}
+			v.init()
 		}
 	}
 </script>
@@ -119,6 +119,9 @@
 		position: relative;
 		top: -10px;
 		left: 2px;
+	}
+	.checkbox-item-horizontal .checked-active:after {
+		top: -10px;
 	}
 	.check-label {
 		display: inline-block;
