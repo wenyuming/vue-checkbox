@@ -19,12 +19,13 @@
 		props: ['options','selected','bgc','direction','max','label','checked','relkey','encheckall'],
 		data () {
 			return {
+				isMax:false,
 				initSelectedAll: false,
 				// initOptions: this.options ? this.options : [],
 				initSelected: this.selected ? this.selected : [],
 				initBgc: this.bgc ? this.bgc : '#FFBF2F',
 				initDirection: this.direction ? this.direction : 'horizontal',
-				initMax: this.max ? this.max : this.options.length,
+				initMax: this.max ? Number(this.max) : this.options.length,
 				initLabel: this.label ? this.label : 'label',
 				initChecked: this.checked ? this.checked : 'checked',
 				initRelKey: this.relkey ? this.relkey : 'id',
@@ -43,9 +44,11 @@
 					this.initSelected = []
 				}
 				this.init()
+				this.$emit('change', {val:this.initSelected})
 			},
 			select (index) {
 				console.log(index, 'index')
+				if (!this.initOptions[index].checked && this.isMax) return
 				this.initOptions[index].checked = !this.initOptions[index].checked
 				let a = this.initOptions[index]
 				this.initOptions.splice(index, 1, a)
@@ -107,6 +110,11 @@
 				} else {
 					this.initSelectedAll = true
 				}
+				if (val.length >= this.initMax) {
+					this.isMax = true
+				} else {
+					this.isMax = false
+				}
 			}
 		},
 		mounted () {
@@ -115,6 +123,16 @@
 			v.initSelected = this.selected
 			// console.log(v.initSelected, 'v.initSelected')
 			v.init()
+			if (this.initSelected.length != this.initOptions.length) {
+				this.initSelectedAll = false
+			} else {
+				this.initSelectedAll = true
+			}
+			if (this.initSelected.length >= this.initMax) {
+				this.isMax = true
+			} else {
+				this.isMax = false
+			}
 		}
 	}
 </script>
