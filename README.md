@@ -14,7 +14,7 @@
 ## direction     string       默认horizontal（水平方向），可选值vertical（垂直方向）
 ## relkey        string       索引值，默认为id，若索引不为id，则必填
 ## encheckall    boolean      非必填，默认为false，值为true时开启
-## max           number       非必填，默认为options数组长度，值为小于等于options数组长度的的数值
+## max           number       最大可选项数，非必填，默认为options数组长度，值为小于等于options数组长度的的数值
 
 
 ## 事件       参数
