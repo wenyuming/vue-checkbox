@@ -1,9 +1,13 @@
 <template>
 	<ul class="checkbox">
+		<li :class="[initDirection == 'horizontal' ? 'checkbox-item-horizontal' : 'checkbox-item-vertical']" v-if="initEnCheckAll">
+			<span @click="selectAll()" :class="['checked', initSelectedAll ? 'checked-active' : '']"></span>
+			<div @click="selectAll()" class="check-label">
+				全选
+			</div>
+		</li>
 		<li :class="[initDirection == 'horizontal' ? 'checkbox-item-horizontal' : 'checkbox-item-vertical']" v-for="(i, index) in initOptions">
-			<span @click="select(index)" :class="['checked', i.checked ? 'checked-active' : '']">
-				
-			</span>
+			<span @click="select(index)" :class="['checked', i.checked ? 'checked-active' : '']"></span>
 			<div @click="select(index)" class="check-label">
 				{{initLabel ? i[initLabel] : i}}
 			</div>
@@ -12,9 +16,10 @@
 </template>
 <script>
 	export default {
-		props: ['options','selected','bgc','direction','max','label','checked','relkey'],
+		props: ['options','selected','bgc','direction','max','label','checked','relkey','encheckall'],
 		data () {
 			return {
+				initSelectedAll: false,
 				// initOptions: this.options ? this.options : [],
 				initSelected: this.selected ? this.selected : [],
 				initBgc: this.bgc ? this.bgc : '#FFBF2F',
@@ -23,10 +28,24 @@
 				initLabel: this.label ? this.label : 'label',
 				initChecked: this.checked ? this.checked : 'checked',
 				initRelKey: this.relkey ? this.relkey : 'id',
+				initEnCheckAll: this.encheckall ? this.encheckall : false
 			}
 		},
 		methods: {
+			selectAll () {
+				this.initSelectedAll = !this.initSelectedAll
+				if (this.initSelectedAll) {
+					this.initSelected = []
+					this.initOptions.forEach(e => {
+						this.initSelected.push(e[this.initRelKey])
+					})
+				} else {
+					this.initSelected = []
+				}
+				this.init()
+			},
 			select (index) {
+				console.log(index, 'index')
 				this.initOptions[index].checked = !this.initOptions[index].checked
 				let a = this.initOptions[index]
 				this.initOptions.splice(index, 1, a)
@@ -48,6 +67,8 @@
 						if (v.initSelected.length > 0) {
 							eg.checked = false
 							v.initSelected.forEach(item => {
+								// console.log(item, 'item')
+								// console.log(v.initRelKey, 'eg[v.initRelKey]')
 								if (item == eg[v.initRelKey]) {
 									eg.checked = true
 									let a = eg
@@ -64,6 +85,7 @@
 						}
 					})
 				}
+				console.log(v.initOptions, 'v.initOptions')
 			}
 		},
 		computed: {
@@ -75,13 +97,23 @@
 		watch: {
 			selected: function (val ,oldVal) {
 				let v = this
+				console.log(val, 'val')
 				v.initSelected = val
 				v.init()
+			},
+			initSelected: function (val, oldVal) {
+				if (val.length != this.initOptions.length) {
+					this.initSelectedAll = false
+				} else {
+					this.initSelectedAll = true
+				}
 			}
 		},
 		mounted () {
+			console.log(111111)
 			let v = this
 			v.initSelected = this.selected
+			// console.log(v.initSelected, 'v.initSelected')
 			v.init()
 		}
 	}
@@ -103,10 +135,10 @@
 		display: inline-block;
 		width: 15px;
 		height: 15px;
+		box-sizing: border-box;
 		vertical-align: middle;
 		border: 1px solid #6F6F6F;
 		border-radius: 50%;
-		box-sizing: border-box;
 		cursor: pointer;
 	}
 	span.checked-active {

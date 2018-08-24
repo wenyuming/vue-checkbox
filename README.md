@@ -1,13 +1,23 @@
+## 更新
+### 新增是否开启全选功能，属性为encheckall，值为true时开启，非必填，默认为false
+
+
 # vue-checkbox
 ## 基于vue的checkbox组件，不依赖其他第三方库
+
+
 ## 属性          类型          描述
 ## options       array        必填
 ## label         string       默认为label
 ## selected      array        默认所选中项（选中项对应的索引数组），必填
 ## direction     string       默认horizontal（水平方向），可选值vertical（垂直方向）
 ## relkey        string       索引值，默认为id，若索引不为id，则必填
+## encheckall    boolean      非必填，默认为false，值为true时开启
+
+
 ## 事件       参数
-## change     val，为所选项索引数组
+## change     data， data.val为所选项索引数组,data.current为当前所点击项的数据
+
 
 ## 后续优化增加最大可选数量，勾号颜色，以及背景色
 
