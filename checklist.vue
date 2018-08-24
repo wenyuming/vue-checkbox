@@ -43,6 +43,7 @@
 				} else {
 					this.initSelected = []
 				}
+				console.log(this.initSelected, 'this.initSelected')
 				this.init()
 				this.$emit('change', {val:this.initSelected})
 			},
@@ -67,25 +68,33 @@
 				let v = this
 				if (v.initOptions.length > 0) {
 					v.initOptions.forEach((eg, index) => {
+						eg.checked = false
 						if (v.initSelected.length > 0) {
-							eg.checked = false
-							v.initSelected.forEach(item => {
-								// console.log(item, 'item')
-								// console.log(v.initRelKey, 'eg[v.initRelKey]')
-								if (item == eg[v.initRelKey]) {
-									eg.checked = true
-									let a = eg
-									v.initOptions.splice(index, 1, a)
-								}
-							})
-						} else {
-							if (eg.checked) {
+							if (v.initSelected.indexOf(eg[v.relkey]) >= 0) {
+								eg.checked = true
 								let a = eg
-								a.checked = false
 								v.initOptions.splice(index, 1, a)
 							}
-							eg.checked = false
 						}
+						// if (v.initSelected.length > 0) {
+						// 	eg.checked = false
+						// 	v.initSelected.forEach(item => {
+						// 		// console.log(item, 'item')
+						// 		// console.log(v.initRelKey, 'eg[v.initRelKey]')
+						// 		if (item == eg[v.initRelKey]) {
+						// 			eg.checked = true
+						// 			let a = eg
+						// 			v.initOptions.splice(index, 1, a)
+						// 		}
+						// 	})
+						// } else {
+						// 	if (eg.checked) {
+						// 		let a = eg
+						// 		a.checked = false
+						// 		v.initOptions.splice(index, 1, a)
+						// 	}
+						// 	eg.checked = false
+						// }
 					})
 				}
 				console.log(v.initOptions, 'v.initOptions')
@@ -104,7 +113,7 @@
 				v.initSelected = val
 				v.init()
 			},
-			initSelected: function (val, oldVal) {
+			initSelected: function (val, oldVal) {			
 				if (val.length != this.initOptions.length) {
 					this.initSelectedAll = false
 				} else {
