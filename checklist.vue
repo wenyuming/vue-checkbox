@@ -16,13 +16,13 @@
 </template>
 <script>
 	export default {
-		props: ['options','selected','bgc','direction','max','label','checked','relkey','encheckall'],
+		props: ['value','options','bgc','direction','max','label','checked','relkey','encheckall'],
 		data () {
 			return {
 				isMax:false,
 				initSelectedAll: false,
 				// initOptions: this.options ? this.options : [],
-				initSelected: this.selected ? this.selected : [],
+				initSelected: this.value ? this.value : [],
 				initBgc: this.bgc ? this.bgc : '#FFBF2F',
 				initDirection: this.direction ? this.direction : 'horizontal',
 				initMax: this.max ? Number(this.max) : this.options.length,
@@ -36,12 +36,18 @@
 			selectAll () {
 				this.initSelectedAll = !this.initSelectedAll
 				if (this.initSelectedAll) {
-					this.initSelected = []
 					this.initOptions.forEach(e => {
-						this.initSelected.push(e[this.initRelKey])
+						if (this.initSelected.indexOf(e[this.initRelKey]) < 0) {
+							this.initSelected.push(e[this.initRelKey])
+						}
 					})
 				} else {
-					this.initSelected = []
+					let length = this.initSelected.length
+					for (let i =0;i<length;i++) {
+						console.log(i,'i')
+						this.initSelected.pop()
+					}
+					
 				}
 				console.log(this.initSelected, 'this.initSelected')
 				this.init()
@@ -107,13 +113,8 @@
 			}
 		},
 		watch: {
-			selected: function (val ,oldVal) {
-				let v = this
-				console.log(val, 'val')
-				v.initSelected = val
-				v.init()
-			},
-			initSelected: function (val, oldVal) {			
+			value: function (val ,oldVal) {
+				this.initSelected = val
 				if (val.length != this.initOptions.length) {
 					this.initSelectedAll = false
 				} else {
@@ -124,13 +125,13 @@
 				} else {
 					this.isMax = false
 				}
+				this.init()
 			}
 		},
 		mounted () {
-			console.log(111111)
 			let v = this
-			v.initSelected = this.selected
-			// console.log(v.initSelected, 'v.initSelected')
+			v.initSelected = this.value
+			console.log(this.value, 'this.value')
 			v.init()
 			if (this.initSelected.length != this.initOptions.length) {
 				this.initSelectedAll = false
