@@ -23,8 +23,9 @@
 | max  | number  | 最大可选项数，非必填，默认为options数组长度，值为小于等于options数组长度的的数值  |
 
 
-### 事件       参数
-#### change     data， data.val为所选项索引数组,data.current为当前所点击项的数据
+| 事件  | 参数  |
+| :------------ | :------------ |
+| change  | data， data.val为所选项索引数组,data.current为当前所点击项的数据  |
 
 
 #### 后续优化增加最大可选数量，勾号颜色，以及背景色
